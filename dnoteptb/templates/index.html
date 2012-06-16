@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block title %}Do Not Ever Press This Button{% endblock %}
+
+{% block content %}
+            <div id="main">
+                <h1>Do Not Ever Press This Button<small class="alpha">alpha</small></h1>
+                <p><b>Do Not Ever Press This Button</b> is a copy of a Google Wave game
+                called <b><a href="https://wave.google.com/wave/#restored:wave:googlewave.com!w%252BJOrC2w2wE.5">The Button</a></b>.
+                The original game was coded by <a href="http://hyperthese.net/">Remy Sanchez</a>
+                from an idea of <a href="http://naouak.hyperthese.net/">Naouak</a>.</p>
+
+                <a href="/press/" id="button" title="Press it. You know you want to."><span>Do Not Ever</span> Press This Button</a>
+
+                {% comment %}<p class="centered info">The button was last pressed <span id="{{ timestamp }}" class="ago" rel="{{ delta }}"></span> ago by <a title="{{ last.player.user.name }}" href="http://twitter.com/{{ last.player.user.username }}">@{{ last.player.user.username }}</a></p>{% endcomment %}
+                <p class="centered info"><a class="user" title="{{ last.player.user.name }}" href="http://twitter.com/{{ last.player.user.username }}">@{{ last.player.user.username }}</a> pressed the button <span id="{{ timestamp }}" class="ago" rel="{{ delta }}"></span> ago.<a id="synchronize" title="Syncronize now. The timer is syncronized automatically every 60 seconds."href="#"></a></p>
+                
+                <ul id="scores">
+                    <li class="score header">
+                        <span class="pos">#</span>
+                        <span class="twitter-link">Player</span>
+                        <span class="score">Score</span>
+                        <!--<span class="date">Date</span>-->
+                    </li>
+                    {% for player in players %}
+                    <li class="score {% cycle 'odd' 'even' %}">
+                        <span class="pos">{{ forloop.counter }}</span>
+                        <span class="twitter-link"><a title="{{ player.user.name }}" href="http://twitter.com/{{ player.user.username }}">@{{ player.user.username }}</a></span>
+                        <span class="score">{{ player.score }}</span>
+                        <!--<span class="date">{{ player.updated|date:"h:i:s A M jS, Y" }}</span>-->
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div id="how-it-works" class="sidebars">
+                <h2>How It Works?</h2>
+                <p>You play using your twitter account. The first time you press
+                the button you will be redirect to twitter to authorize this application,
+                then you will be redirected back to the game's home page and you'll
+                be able to see your score. That's all.</p>
+                <p class="centered"><a title="Share on twitter: &quot;Play Do Not Ever Press This Button&quot;" href="http://twitter.com/home?status=Play+Do+Not+Ever+Press+This+Button%3a+http%3a%2f%2fbit.ly%2f7cGl3v+%23dnoteptb"><img src="/static/css/images/share.png"/></a></p>
+            </div>
+
+            <div id="the-rules" class="sidebars">
+                <h2>The Rules:</h2>
+                <ol>
+                    <li>When you press the button you get 1 point for every second
+                    since the last time it was pressed. At the same time, the previous
+                    person who pressed the button loses the same amount of points.</li>
+                    <li>You can't get points if you were the last person to press the button.</li>
+                    <li class="hightlight">You can't press the button two consecutive times in 12 hours.</li>
+                    <li>The first player to get 300.000 points, after somebody else press the button, win the game.</li>
+                </ol>
+
+                <p class="centered"><a title="Stats" href="/stats"><img src="/static/css/images/stats.png"/></a></p>
+            </div>
+{% endblock %}

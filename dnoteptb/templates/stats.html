@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}Do Not Ever Press This Button - Stats{% endblock %}
+
+{% block bodyid %}stats{% endblock %}
+
+{% block content %}
+    <h1><a href="/" title="Go to home page">Do Not Ever Press This Button<small class="alpha">alpha</small></a></h1>
+    <div id="stats-page">
+        <div id="scores-graph" style="width:960px; height:600px"></div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/static/js/raphael.min.js"></script>
+<script type="text/javascript" src="/static/js/g.raphael.min.js"></script>
+<script type="text/javascript" src="/static/js/g.line.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.flot.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.flot.navigate.min.js"></script>
+<script type="text/javascript"> var scores = {{ scores|safe }}; </script>
+<script type="text/javascript" src="/static/js/stats.js"></script>
+{% endblock %}

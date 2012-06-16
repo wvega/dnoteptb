@@ -1,0 +1,28 @@
+﻿application: dnoteptb
+version: 8
+runtime: python
+api_version: 1
+
+default_expiration: '3650d'
+
+handlers:
+- url: /mindcontrol
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  secure: optional
+  login: admin
+  
+- url: /favicon.ico
+  static_files: dnoteptb/media/css/images/favicon.ico
+  upload: dnoteptb/media/css/images/favicon.ico
+
+- url: /static
+  static_dir: dnoteptb/media
+  secure: optional
+
+- url: /media
+  static_dir: _generated_media
+  secure: optional
+
+- url: /.*
+  script: common/appenginepatch/main.py
+  secure: optional

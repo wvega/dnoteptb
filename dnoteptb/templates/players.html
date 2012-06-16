@@ -1,0 +1,14 @@
+<li class="score header">
+    <span class="pos">#</span>
+    <span class="twitter-link">Player</span>
+    <span class="score">Score</span>
+    <!--<span class="date">Date</span>-->
+</li>
+{% for player in players %}
+<li class="score {% cycle 'odd' 'even' %}">
+    <span class="pos">{{ forloop.counter }}</span>
+    <span class="twitter-link"><a title="{{ player.user.name }}" href="http://twitter.com/{{ player.user.username }}">@{{ player.user.username }}</a></span>
+    <span class="score">{{ player.score }}</span>
+    <!--<span class="date">{{ player.updated|date:"h:i:s A M jS, Y" }}</span>-->
+</li>
+{% endfor %}
