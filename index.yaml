@@ -18,13 +18,13 @@ indexes:
 - kind: Hit
   ancestor: yes
   properties:
-  - name: start
+  - name: created
+    direction: desc
 
 - kind: Hit
   ancestor: yes
   properties:
-  - name: created
-    direction: desc
+  - name: start
 
 - kind: Player
   properties:

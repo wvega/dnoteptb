@@ -1,5 +1,5 @@
 ﻿application: dnoteptb
-version: 8
+version: 9
 runtime: python
 api_version: 1
 
@@ -10,7 +10,7 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   secure: optional
   login: admin
-  
+
 - url: /favicon.ico
   static_files: dnoteptb/media/css/images/favicon.ico
   upload: dnoteptb/media/css/images/favicon.ico

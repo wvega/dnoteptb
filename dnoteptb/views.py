@@ -2,6 +2,7 @@
 import calendar
 import cgi
 import datetime
+import logging
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -20,13 +21,14 @@ from dnoteptb.oauth.oauth import OAuthRequest, OAuthSignatureMethod_HMAC_SHA1
 
 # constants
 
-CALLBACK_URL = 'http://localhost:8000/ready/'
+# CALLBACK_URL = 'http://localhost:8080/ready/'
 CALLBACK_URL = 'http://dnoteptb.appspot.com/ready/'
 
 DNOTEPTB_OK = 1
 DNOTEPTB_FIRST_PLAYER = 1 << 1
 DNOTEPTB_TOO_SOON_ERROR = 1 << 2
 DNOTEPTB_SAME_PLAYER = 1 << 3
+
 
 # views
 
@@ -42,7 +44,7 @@ def index(request):
         # fill in missing information
         if user.name is None:
             token = user.OAuthToken()
-            oauth_request = OAuthRequest.from_consumer_and_token(consumer, token=token, http_method='GET', http_url='http://twitter.com/account/verify_credentials.json')
+            oauth_request = OAuthRequest.from_consumer_and_token(consumer, token=token, http_method='GET', http_url='https://api.twitter.com/1.1/account/verify_credentials.json')
             oauth_request.sign_request(OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
             response = client.access_resource(oauth_request)
             info = simplejson.loads(response)
@@ -63,7 +65,7 @@ def index(request):
     else:
         delta = 0
         timestamp = 0
-    
+
     return render(request, 'index.html', {'user': user, 'players': players, 'last': last, 'delta': delta, 'timestamp': timestamp})
 
 
@@ -76,9 +78,9 @@ def press(request):
     if user is None:
         return HttpResponseRedirect('/login/press')
 
-    # stop @dgiraldo_ from cheating
-    if user.username == 'unknown1902':
-        return HttpResponseRedirect('/gotcha')
+    # # stop @dgiraldo_ from cheating
+    # if user.username == 'unknown1902':
+    #     return HttpResponseRedirect('/gotcha')
 
     game = util.get_running_game()
 
@@ -99,7 +101,8 @@ def press(request):
             memcache.delete('last-hit-%s' % game.key())
             return DNOTEPTB_FIRST_PLAYER
         elif previous.player.key() == player.key():
-            if (now - previous.start).seconds < 43200:
+            if (now - previous.start).seconds < 1800:
+            # if (now - previous.start).seconds < 43200:
                 return DNOTEPTB_TOO_SOON_ERROR
 
         # insert new hit
@@ -167,7 +170,7 @@ def login(request, action=''):
     if user is not None:
         return HttpResponseRedirect('/')
     client = TwitterOAuthClient(request)
-    
+
     # get request token
     oauth_request = OAuthRequest.from_consumer_and_token(consumer, callback='%s%s' % (CALLBACK_URL, action), http_url=client.request_token_url)
     oauth_request.sign_request(OAuthSignatureMethod_HMAC_SHA1(), consumer, None)
@@ -211,7 +214,7 @@ def ready(request, action=''):
         user.token = token.key
         user.secret = token.secret
     user.put()
-    
+
     request.session['token'] = token.key
 
     return HttpResponseRedirect('/%s' % action)
