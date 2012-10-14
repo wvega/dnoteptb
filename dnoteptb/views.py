@@ -101,8 +101,7 @@ def press(request):
             memcache.delete('last-hit-%s' % game.key())
             return DNOTEPTB_FIRST_PLAYER
         elif previous.player.key() == player.key():
-            if (now - previous.start).seconds < 1800:
-            # if (now - previous.start).seconds < 43200:
+            if (now - previous.start).seconds < 3600:
                 return DNOTEPTB_TOO_SOON_ERROR
 
         # insert new hit
